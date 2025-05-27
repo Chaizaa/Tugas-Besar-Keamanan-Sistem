@@ -1,21 +1,15 @@
 <?php
 // db.php - Koneksi database menggunakan PDO
 $host = 'localhost';
-$db   = 'phplogin';
-$user = 'webuser';
-$pass = 'Hafidz1103223052@123';
-$charset = 'utf8mb4';
+$dbname   = 'phplogin';
+$username = 'webuser';
+$password = 'Aisyah1103223148#148';
 
-$dsn = "mysql:host=$host;dbname=$db;charset=$charset";
-$options = [
-    PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION, // aktifkan exception on error
-    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-    PDO::ATTR_EMULATE_PREPARES   => false, // gunakan prepared statements asli
-];
-
+// Create a database connection
 try {
-    $pdo = new PDO($dsn, $user, $pass, $options);
+    $pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
+// Set PDO to throw exceptions on error
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 } catch (PDOException $e) {
-    // Koneksi gagal
-    die('Koneksi gagal: ' . $e->getMessage());
+    die("Database connection failed: " . $e->getMessage());
 }

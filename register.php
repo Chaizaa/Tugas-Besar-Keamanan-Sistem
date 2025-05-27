@@ -1,72 +1,76 @@
 <?php
-session_start();
-require 'db.php';
+require_once 'db.php';
 
-// Jika sudah login, redirect ke dashboard
-if (isset($_SESSION['user_id'])) {
-    header('Location: dashboard.php');
-    exit;
-}
-
-$error = '';
-$success = '';
-$username = '';
+$error_message = '';
+$success_message = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Ambil input dari form
-    $username = trim($_POST['username']);
-    $password = $_POST['password'];
-    $confirm_password = $_POST['confirm_password'];
+    // Get form data and sanitize
+    $username = filter_input(INPUT_POST, 'username', FILTER_SANITIZE_STRING);
 
-    // Validasi input
-    if (empty($username) || empty($password) || empty($confirm_password)) {
-        $error = 'Semua kolom harus diisi.';
-    } elseif ($password !== $confirm_password) {
-        $error = 'Kata sandi dan konfirmasi harus sama.';
+    // Check if username already exists
+    $stmt = $pdo->prepare("SELECT COUNT(*) FROM users WHERE username = ?");
+    $stmt->execute([$username]);
+    if ($stmt->fetchColumn() > 0) {
+        $error_message = "Username already exists";
     } else {
-        // Cek apakah username sudah ada
-        $stmt = $pdo->prepare('SELECT id FROM users WHERE username = ?');
-        $stmt->execute([$username]);
-        if ($stmt->fetch()) {
-            $error = 'Nama pengguna sudah terdaftar.';
-        } else {
-            // Insert user baru dengan password ter-hash
-            $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-            $insert = $pdo->prepare('INSERT INTO users (username, password) VALUES (?, ?)');
-            if ($insert->execute([$username, $hashed_password])) {
-                $success = 'Registrasi berhasil. <a href="index.php">Klik di sini</a> untuk login.';
-                // Bersihkan variabel username agar field kosong kembali
-                $username = '';
-            } else {
-                $error = 'Gagal mendaftar. Silakan coba lagi.';
-            }
+        // Generate a random salt
+        $salt = bin2hex(random_bytes(32));
+
+        // Hash the password with the salt
+        $password = $_POST['password'];
+        $password_hash = hash('sha256', $password . $salt);
+
+        // Insert new user into database
+        $stmt = $pdo->prepare("INSERT INTO users (username, password_hash, salt) VALUES (?, ?, ?)");
+        try {
+            $stmt->execute([$username, $password_hash, $salt]);
+            $success_message = "Registration successful! You can now login.";
+        } catch (PDOException $e) {
+            $error_message = "Registration failed: " . $e->getMessage();
         }
     }
 }
 ?>
+
 <!DOCTYPE html>
-<html lang="id">
+<html>
 <head>
+    <title>Register</title>
     <meta charset="UTF-8">
-    <title>Halaman Registrasi</title>
+    <style>
+        body { font-family: Arial; max-width: 600px; margin: 0 auto; padding: 20px; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; }
+        input { width: 100%; padding: 8px; }
+        .error { color: red; }
+        .success { color: green; }
+        button { padding: 10px 15px; background: green; color: white; border: none; cursor: pointer; }
+    </style>
 </head>
 <body>
-    <h2>Registrasi</h2>
-    <?php if ($error): ?>
-        <p style="color:red;"><?php echo htmlspecialchars($error, ENT_QUOTES, 'UTF-8'); ?></p>
+    <h2>Register</h2>
+
+    <?php if ($error_message): ?>
+        <div class="error"><?= htmlspecialchars($error_message) ?></div>
     <?php endif; ?>
-    <?php if ($success): ?>
-        <p style="color:green;"><?php echo $success; ?></p>
+
+    <?php if ($success_message): ?>
+        <div class="success"><?= htmlspecialchars($success_message) ?></div>
     <?php endif; ?>
-    <form action="register.php" method="post">
-        <label>Nama Pengguna:</label><br>
-        <input type="text" name="username" value="<?php echo htmlspecialchars($username, ENT_QUOTES, 'UTF-8'); ?>" required><br>
-        <label>Kata Sandi:</label><br>
-        <input type="password" name="password" required><br>
-        <label>Konfirmasi Kata Sandi:</label><br>
-        <input type="password" name="confirm_password" required><br>
-        <button type="submit">Daftar</button>
+
+    <form method="POST" action="">
+        <div class="form-group">
+            <label>Username:</label>
+            <input type="text" name="username" required>
+        </div>
+        <div class="form-group">
+            <label>Password:</label>
+            <input type="password" name="password" required>
+        </div>
+        <button type="submit">Register</button>
     </form>
-    <p>Sudah punya akun? <a href="index.php">Login di sini</a>.</p>
+
+    <a href="login.php">Already have an account? Login</a>
 </body>
 </html>

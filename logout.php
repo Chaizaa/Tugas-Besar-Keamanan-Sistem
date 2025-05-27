@@ -1,16 +1,28 @@
 <?php
 session_start();
-// Hapus semua data sesi
+
+// Unset all session variables
 $_SESSION = array();
-// Hapus cookie sesi
+
+// Delete the session cookie
 if (ini_get("session.use_cookies")) {
     $params = session_get_cookie_params();
-    setcookie(session_name(), '', time() - 42000,
-        $params["path"], $params["domain"],
-        $params["secure"], $params["httponly"]
+    setcookie(
+        session_name(),
+        '',
+        time() - 42000,
+        $params["path"],
+        $params["domain"],
+        $params["secure"],
+        $params["httponly"]
     );
 }
-// Akhiri sesi
+
+// Destroy the session
 session_destroy();
-header('Location: index.php');
+
+// Redirect to login page
+header("Location: login.php");
 exit;
+?>
+
