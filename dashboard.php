@@ -7,7 +7,16 @@ if (!isset($_SESSION['user_id'])) {
     exit;
 }
 
-$username = htmlspecialchars($_SESSION['username']);
+require_once 'db.php';
+
+// Ambil informasi lengkap user dari database
+$stmt = $pdo->prepare("SELECT username, email, fullname FROM users WHERE id = ?");
+$stmt->execute([$_SESSION['user_id']]);
+$user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+$username = htmlspecialchars($user['username']);
+$email = htmlspecialchars($user['email']);
+$fullname = htmlspecialchars($user['fullname']);
 ?>
 
 <!DOCTYPE html>
@@ -28,6 +37,7 @@ $username = htmlspecialchars($_SESSION['username']);
             display: flex;
             justify-content: space-between;
             align-items: center;
+            margin-bottom: 20px;
         }
 
         .logout {
@@ -41,15 +51,30 @@ $username = htmlspecialchars($_SESSION['username']);
         .logout:hover {
             background-color: #d32f2f;
         }
+        .user-info {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .user-info p {
+            margin: 5px 0;
+        }
     </style>
 </head>
 <body>
 
     <div class="header">
-        <h2>Welcome, <?php echo $username; ?></h2>
+        <h2>Welcome, <?php echo $fullname; ?></h2>
         <a href="logout.php" class="logout">Logout</a>
     </div>
-
+    <div class="user-info">
+        <h3>Your Information</h3>
+        <p><strong>Username:</strong> <?php echo $username; ?></p>
+        <p><strong>Email:</strong> <?php echo $email; ?></p>
+        <p><strong>Full Name:</strong> <?php echo $fullname; ?></p>
+    </div>
     <div>
         <h3>Secure Dashboard</h3>
         <p>This is a secure area that is only accessible after successful login.</p>

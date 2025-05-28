@@ -13,12 +13,12 @@ if (isset($_SESSION['user_id'])) {
 // Jika form dikirim (POST)
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Ambil data dari form
-    $username = filter_input(INPUT_POST, 'username', FILTER_SANITIZE_STRING);
+    $login = filter_input(INPUT_POST, 'login', FILTER_SANITIZE_STRING);
     $password = $_POST['password'];
 
     // Ambil data user dari database
-    $stmt = $pdo->prepare("SELECT id, username, password_hash, salt FROM users WHERE username = ?");
-    $stmt->execute([$username]);
+    $stmt = $pdo->prepare("SELECT id, username, password_hash, salt FROM users WHERE username = ? OR email = ?");
+    $stmt->execute([$login, $login]);
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($user) {
@@ -98,8 +98,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" onsubmit="saltPassword()">
     <div class="form-group">
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username" required>
+        <label for="login">Usernameor Email:</label>
+        <input type="text" id="login" name="login" required>
     </div>
 
     <div class="form-group">
