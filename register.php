@@ -50,14 +50,93 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <title>Register</title>
     <meta charset="UTF-8">
     <style>
-        body { font-family: Arial; max-width: 600px; margin: 0 auto; padding: 20px; }
-        .form-group { margin-bottom: 15px; }
-        label { display: block; margin-bottom: 5px; }
-        input { width: 100%; padding: 8px; box-sizing: border-box; }
-        .error { color: red; margin-bottom: 15px; }
-        .success { color: green; margin-bottom: 15px;}
-        button { padding: 10px 15px; background: #4CAF50; color: white; border: none; cursor: pointer; }
-        a { display: inline-block; margin-top: 15px; }
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: #f0f4f8;
+        color: #333;
+        max-width: 500px;
+        margin: 50px auto;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        background-color: #ffffff;
+    }
+
+    h2 {
+        text-align: center;
+        color: #2c3e50;
+        margin-bottom: 25px;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 6px;
+        font-weight: 600;
+    }
+
+    input {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccd6dd;
+        border-radius: 8px;
+        box-sizing: border-box;
+        transition: border 0.3s ease;
+    }
+
+    input:focus {
+        border-color: #3498db;
+        outline: none;
+    }
+
+    .error {
+        color: #e74c3c;
+        background: #fdecea;
+        border: 1px solid #f5c6cb;
+        padding: 10px;
+        margin-bottom: 20px;
+        border-radius: 6px;
+    }
+
+    .success {
+        color: #2ecc71;
+        background: #eafaf1;
+        border: 1px solid #b2f0d7;
+        padding: 10px;
+        margin-bottom: 20px;
+        border-radius: 6px;
+    }
+
+    button {
+        width: 100%;
+        padding: 12px;
+        background: linear-gradient(135deg, #3498db, #2980b9);
+        color: white;
+        font-size: 16px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background 0.3s ease;
+    }
+
+    button:hover {
+        background: linear-gradient(135deg, #2980b9, #2471a3);
+    }
+
+    a {
+        display: block;
+        margin-top: 20px;
+        text-align: center;
+        text-decoration: none;
+        color: #3498db;
+    }
+
+    a:hover {
+        text-decoration: underline;
+    }
     </style>
 </head>
 <body>

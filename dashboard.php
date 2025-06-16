@@ -27,39 +27,60 @@ $fullname = htmlspecialchars($user['fullname']);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         body {
-            font-family: Arial, sans-serif;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f0f4f8;
+            color: #333;
+            max-width: 500px;
+            margin: 50px auto;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            background-color: #ffffff;
         }
 
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
+        h2 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 25px;
         }
 
-        .logout {
-            background-color: #f44336;
-            color: white;
-            padding: 10px 15px;
-            text-decoration: none;
-            border-radius: 4px;
-        }
-
-        .logout:hover {
-            background-color: #d32f2f;
-        }
         .user-info {
             background: #f9f9f9;
             padding: 20px;
-            border-radius: 5px;
-            margin-bottom: 20px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            border: 1px solid #e0e0e0;
         }
 
         .user-info p {
-            margin: 5px 0;
+            margin: 10px 0;
+        }
+
+        .logout {
+            display: block;
+            text-align: center;
+            padding: 12px;
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+            font-size: 16px;
+            border: none;
+            border-radius: 8px;
+            text-decoration: none;
+            margin-top: 15px;
+            transition: background 0.3s ease;
+        }
+
+        .logout:hover {
+            background: linear-gradient(135deg, #c0392b, #a93226);
+        }
+
+        .info-box {
+            text-align: center;
+            font-weight: 500;
+            color: #2c3e50;
+            background: #ecf0f1;
+            padding: 15px;
+            border-radius: 10px;
         }
     </style>
 </head>
@@ -76,17 +97,7 @@ $fullname = htmlspecialchars($user['fullname']);
         <p><strong>Full Name:</strong> <?php echo $fullname; ?></p>
     </div>
     <div>
-        <h3>Secure Dashboard</h3>
-        <p>This is a secure area that is only accessible after successful login.</p>
-        <p>Your login is protected with:</p>
-        <ul>
-            <li>HTTPS encryption</li>
-            <li>Password salting</li>
-            <li>Password hashing (SHA-256)</li>
-            <li>Protection against SQL injection</li>
-            <li>Protection against XSS attacks</li>
-            <li>Protection against buffer overflow</li>
-        </ul>
+        <h3>Ini adalah website yang sudah dijamin keamanannya</h3>
     </div>
 
 </body>
