@@ -6,9 +6,9 @@ $success_message = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Get form data and sanitize
-    $username = filter_input(INPUT_POST, 'username', FILTER_SANITIZE_STRING);
+    $username = filter_input(INPUT_POST, 'username', FILTER_SANITIZE_SPECIAL_CHARS);
     $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
-    $fullname = filter_input(INPUT_POST, 'fullname', FILTER_SANITIZE_STRING);
+    $fullname = filter_input(INPUT_POST, 'fullname', FILTER_SANITIZE_SPECIAL_CHARS);
 
     // Validate email format
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
